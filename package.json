@@ -23,6 +23,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "express-list-endpoints": "^6.0.0",
+    "http-errors": "^2.0.0",
     "mongoose": "^6.2.1"
   },
   "devDependencies": {
