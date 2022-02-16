@@ -22,7 +22,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.2",
-    "express-list-endpoints": "^6.0.0"
+    "express-list-endpoints": "^6.0.0",
+    "mongoose": "^6.2.1"
   },
   "devDependencies": {
     "dotenv": "^16.0.0",
