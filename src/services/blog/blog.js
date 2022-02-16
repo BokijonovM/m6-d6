@@ -4,6 +4,16 @@ import BlogsModel from "./schema.js";
 
 const blogRouter = express.Router();
 
+blogRouter.post("/", async (req, res, next) => {
+  try {
+    const newBlog = new BlogsModel(req.body);
+    const { _id } = await newBlog.save();
+    res.status(201).send(newBlog);
+  } catch (error) {
+    next(error);
+  }
+});
+
 blogRouter.get("/", async (rea, res, next) => {
   try {
     const blogs = await BlogsModel.find();
