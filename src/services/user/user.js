@@ -17,6 +17,31 @@ usersRouter.post("/", async (req, res, next) => {
 
 usersRouter.post("/:userId/comment", async (req, res, next) => {
   try {
+    const findBlog = await BlogsModel.findById(req.body.blogId, {
+      _id: 0,
+    });
+    if (findBlog) {
+      const commentToInsert = {
+        ...findBlog.toObject(),
+        commentDate: new Date(),
+      };
+      console.log(commentToInsert);
+
+      const modifiedUser = await UsersModel.findByIdAndUpdate(
+        req.params.userId,
+        { $push: { comment: findBlog } },
+        { new: true }
+      );
+      if (modifiedUser) {
+        res.send(modifiedUser);
+      } else {
+        next(
+          createHttpError(404, `User with Id ${req.params.userId} not found!`)
+        );
+      }
+    } else {
+      next(createHttpError(404, `Book with Id ${req.body.blogId} not found!`));
+    }
   } catch (error) {
     next(error);
   }

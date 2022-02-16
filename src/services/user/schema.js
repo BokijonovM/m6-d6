@@ -10,12 +10,12 @@ const userSchema = new Schema(
     dateOfBirth: { type: Date, required: false },
     age: { type: Number, min: 18, max: 65, required: true },
     professions: [String],
-    purchaseHistory: [
+    comment: [
       {
         asin: { type: String },
-        title: { type: String },
-        category: { type: String },
-        purchaseDate: { type: Date },
+        commentText: { type: String, required: true },
+        rate: { type: Number, min: 1, max: 5, required: true },
+        commentDate: { type: Date },
       },
     ],
   },
