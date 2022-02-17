@@ -47,4 +47,51 @@ usersRouter.post("/:userId/comment", async (req, res, next) => {
   }
 });
 
+usersRouter.get("/:userId/comment", async (req, res, next) => {
+  try {
+    const user = await UsersModel.findById(req.params.userId);
+    if (user) {
+      res.send(user.comment);
+    } else {
+      res.status(404).send(`User with id ${req.params.userId} not found!`);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+usersRouter.put("/:userId/comment/:commentId", async (req, res, next) => {
+  try {
+    const user = await UsersModel.findById(req.params.userId);
+    if (user) {
+      const index = user.comment.findIndex(
+        comment => comment._id.toString() === req.params.commentId
+      );
+
+      if (index !== -1) {
+        user.comment[index] = {
+          ...user.comment[index].toObject(),
+          ...req.body,
+        };
+
+        await user.save();
+        res.send(user);
+      } else {
+        next(
+          createHttpError(
+            404,
+            `Comment with id ${req.params.commentId} not found!`
+          )
+        );
+      }
+    } else {
+      next(
+        createHttpError(404, `User with id ${req.params.userId} not found!`)
+      );
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default usersRouter;
