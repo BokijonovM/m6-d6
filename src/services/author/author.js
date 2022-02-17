@@ -13,4 +13,31 @@ authorsRouter.post("/", async (req, res, next) => {
   }
 });
 
+authorsRouter.get("/", async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+});
+
+authorsRouter.get("/:authorId", async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+});
+
+authorsRouter.put("/:authorId", async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+});
+
+authorsRouter.delete("/:authorId", async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+});
 export default authorsRouter;
