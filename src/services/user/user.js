@@ -22,14 +22,14 @@ usersRouter.post("/:userId/comment", async (req, res, next) => {
     });
     if (findBlog) {
       const commentToInsert = {
-        ...findBlog.toObject(),
+        ...req.body,
         commentDate: new Date(),
       };
       console.log(commentToInsert);
 
       const modifiedUser = await UsersModel.findByIdAndUpdate(
         req.params.userId,
-        { $push: { comment: findBlog } },
+        { $push: { comment: commentToInsert } },
         { new: true }
       );
       if (modifiedUser) {

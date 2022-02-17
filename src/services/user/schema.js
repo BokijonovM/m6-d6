@@ -12,7 +12,6 @@ const userSchema = new Schema(
     professions: [String],
     comment: [
       {
-        asin: { type: String },
         commentText: { type: String, required: true },
         rate: { type: Number, min: 1, max: 5, required: true },
         commentDate: { type: Date },
