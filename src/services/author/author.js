@@ -15,6 +15,8 @@ authorsRouter.post("/", async (req, res, next) => {
 
 authorsRouter.get("/", async (req, res, next) => {
   try {
+    const authors = await AuthorModel.find();
+    res.send(authors);
   } catch (error) {
     next(error);
   }
@@ -22,6 +24,12 @@ authorsRouter.get("/", async (req, res, next) => {
 
 authorsRouter.get("/:authorId", async (req, res, next) => {
   try {
+    const author = await AuthorModel.findById(req.params.authorId);
+    if (author) {
+      res.send(author);
+    } else {
+      res.status(404).send(`Author not found1`);
+    }
   } catch (error) {
     next(error);
   }
