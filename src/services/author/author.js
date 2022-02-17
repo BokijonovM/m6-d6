@@ -37,6 +37,18 @@ authorsRouter.get("/:authorId", async (req, res, next) => {
 
 authorsRouter.put("/:authorId", async (req, res, next) => {
   try {
+    const updatedAuthor = await AuthorModel.findByIdAndUpdate(
+      req.params.authorId,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    if (updatedAuthor) {
+      res.send(updatedAuthor);
+    } else {
+      res.status(404).send(`Author not found!`);
+    }
   } catch (error) {
     next(error);
   }
@@ -44,6 +56,14 @@ authorsRouter.put("/:authorId", async (req, res, next) => {
 
 authorsRouter.delete("/:authorId", async (req, res, next) => {
   try {
+    const deletedAuthor = await AuthorModel.findOneAndDelete(
+      req.params.authorId
+    );
+    if (deletedAuthor) {
+      res.status(204).send(`Author deleted!`);
+    } else {
+      res.status(404).send(`Author not found!`);
+    }
   } catch (error) {
     next(error);
   }
