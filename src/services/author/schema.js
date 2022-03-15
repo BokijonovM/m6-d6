@@ -14,13 +14,6 @@ const AuthorSchema = new Schema(
         dateOfBirth: { type: Date, required: false },
         age: { type: Number, min: 18, max: 65, required: true },
         professions: [String],
-        comment: [
-          {
-            commentText: { type: String, required: true },
-            rate: { type: Number, min: 1, max: 5, required: true },
-            commentDate: { type: Date },
-          },
-        ],
       },
     ],
   },

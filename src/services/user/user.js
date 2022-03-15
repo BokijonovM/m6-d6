@@ -121,12 +121,23 @@ usersRouter.get("/me", basicAuthMiddleware, async (req, res, next) => {
   }
 });
 
+// usersRouter.get("/me/stories", basicAuthMiddleware, async (req, res, next) => {
+//   try {
+//     const userId = req.user._id;
+//     const result = await UsersModel.findById(userId).populate({
+//       path: "blog",
+//       select: ["_id", "category", "title", "cover"],
+//     });
+//     res.send(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
 usersRouter.get("/me/stories", basicAuthMiddleware, async (req, res, next) => {
   try {
     const userId = req.user._id;
-    console.log(userId);
     const result = await UsersModel.findById(userId).populate("blog");
-    console.log(result);
     res.send(result);
   } catch (error) {
     next(error);
