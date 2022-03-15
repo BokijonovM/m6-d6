@@ -2,6 +2,8 @@ import express from "express";
 import createHttpError from "http-errors";
 import UsersModel from "./schema.js";
 import BlogsModel from "../blog/schema.js";
+import { basicAuthMiddleware } from "../../auth/basic.js";
+import { adminOnlyMiddleware } from "../../auth/admin.js";
 
 const usersRouter = express.Router();
 
@@ -15,14 +17,19 @@ usersRouter.post("/", async (req, res, next) => {
   }
 });
 
-usersRouter.get("/", async (req, res, next) => {
-  try {
-    const user = await UsersModel.find();
-    res.send(user);
-  } catch (error) {
-    next(error);
+usersRouter.get(
+  "/",
+  basicAuthMiddleware,
+  adminOnlyMiddleware,
+  async (req, res, next) => {
+    try {
+      const user = await UsersModel.find();
+      res.send(user);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 usersRouter.post("/:userId/comment", async (req, res, next) => {
   try {
@@ -98,6 +105,16 @@ usersRouter.put("/:userId/comment/:commentId", async (req, res, next) => {
         createHttpError(404, `User with id ${req.params.userId} not found!`)
       );
     }
+  } catch (error) {
+    next(error);
+  }
+});
+
+// me
+
+usersRouter.get("/me", basicAuthMiddleware, async (req, res, next) => {
+  try {
+    res.send(req.user);
   } catch (error) {
     next(error);
   }
