@@ -5,6 +5,11 @@ import mongoose from "mongoose";
 import blogRouter from "./services/blog/blog.js";
 import usersRouter from "./services/user/user.js";
 import authorsRouter from "./services/author/author.js";
+import {
+  unauthorizedHandler,
+  forbiddenHandler,
+  catchAllHandler,
+} from "./errorHandlers.js";
 
 const server = express();
 const port = process.env.PORT || 3001;
@@ -15,6 +20,10 @@ server.use(express.json());
 server.use("/blog", blogRouter);
 server.use("/author", authorsRouter);
 server.use("/user", usersRouter);
+
+server.use(unauthorizedHandler);
+server.use(forbiddenHandler);
+server.use(catchAllHandler);
 
 mongoose.connect(process.env.MONGO_CONNECTION);
 

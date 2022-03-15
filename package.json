@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/BokijonovM/m6-d6#readme",
   "dependencies": {
+    "atob": "^2.1.2",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "express-list-endpoints": "^6.0.0",

@@ -15,6 +15,15 @@ usersRouter.post("/", async (req, res, next) => {
   }
 });
 
+usersRouter.get("/", async (req, res, next) => {
+  try {
+    const user = await UsersModel.find();
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
 usersRouter.post("/:userId/comment", async (req, res, next) => {
   try {
     const findBlog = await BlogsModel.findById(req.body.blogId, {
@@ -65,7 +74,7 @@ usersRouter.put("/:userId/comment/:commentId", async (req, res, next) => {
     const user = await UsersModel.findById(req.params.userId);
     if (user) {
       const index = user.comment.findIndex(
-        comment => comment._id.toString() === req.params.commentId
+        (comment) => comment._id.toString() === req.params.commentId
       );
 
       if (index !== -1) {
