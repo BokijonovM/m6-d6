@@ -20,6 +20,7 @@ const userSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
   }
 );
 
@@ -60,5 +61,11 @@ userSchema.statics.checkCredentials = async function (email, plainPW) {
     return null;
   }
 };
+
+userSchema.virtual("blog", {
+  ref: "Blog",
+  foreignField: "user",
+  localField: "_id",
+});
 
 export default model("User", userSchema);

@@ -4,6 +4,7 @@ import UsersModel from "./schema.js";
 import BlogsModel from "../blog/schema.js";
 import { basicAuthMiddleware } from "../../auth/basic.js";
 import { adminOnlyMiddleware } from "../../auth/admin.js";
+import pkg from "mongoose";
 
 const usersRouter = express.Router();
 
@@ -115,6 +116,18 @@ usersRouter.put("/:userId/comment/:commentId", async (req, res, next) => {
 usersRouter.get("/me", basicAuthMiddleware, async (req, res, next) => {
   try {
     res.send(req.user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+usersRouter.get("/me/stories", basicAuthMiddleware, async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    console.log(userId);
+    const result = await UsersModel.findById(userId).populate("blog");
+    console.log(result);
+    res.send(result);
   } catch (error) {
     next(error);
   }
