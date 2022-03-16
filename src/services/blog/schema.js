@@ -19,7 +19,11 @@ const blogSchema = new Schema(
         rate: { type: Number, required: true, min: 1, max: 5 },
       },
     ],
-    user: { type: Schema.Types.ObjectId, ref: "User" },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
   },
   {
     timestamps: true,
