@@ -4,7 +4,8 @@ import UsersModel from "./schema.js";
 import BlogsModel from "../blog/schema.js";
 import { basicAuthMiddleware } from "../../auth/basic.js";
 import { adminOnlyMiddleware } from "../../auth/admin.js";
-import { JwtMiddleware } from "../../auth/jwt.js";
+import { authenticateUser } from "../../auth/tools.js";
+import { JWTAuthMiddleware } from "../../auth/token.js";
 
 const usersRouter = express.Router();
 
@@ -126,6 +127,47 @@ usersRouter.get("/me/stories", basicAuthMiddleware, async (req, res, next) => {
     const posts = await BlogsModel.find({ user: req.user._id.toString() });
 
     res.status(200).send(posts);
+  } catch (error) {
+    next(error);
+  }
+});
+
+usersRouter.put("/me", JWTAuthMiddleware, async (req, res, next) => {
+  try {
+    const user = await UsersModel.findByIdAndUpdate(req.user._id, req.body, {
+      new: true,
+    });
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+usersRouter.delete("/me", JWTAuthMiddleware, async (req, res, next) => {
+  try {
+    await UsersModel.findByIdAndDelete(req.user._id);
+    res.send();
+  } catch (error) {
+    next(error);
+  }
+});
+
+usersRouter.post("/login", async (req, res, next) => {
+  try {
+    // 1. Obtain credentials from req.body
+    const { email, password } = req.body;
+
+    // 2. Verify credentials
+    const user = await UsersModel.checkCredentials(email, password);
+
+    if (user) {
+      // 3. If credentials are ok we are going to generate an Access Token and send it as a response
+      const accessToken = await authenticateUser(user);
+      res.send({ accessToken });
+    } else {
+      // 4. If credentials are not fine --> throw an error (401)
+      next(createError(401, "Credentials are not ok!"));
+    }
   } catch (error) {
     next(error);
   }
