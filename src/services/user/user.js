@@ -114,7 +114,7 @@ usersRouter.put("/:userId/comment/:commentId", async (req, res, next) => {
 
 // me
 
-usersRouter.get("/me", basicAuthMiddleware, async (req, res, next) => {
+usersRouter.get("/me", JWTAuthMiddleware, async (req, res, next) => {
   try {
     res.send(req.user);
   } catch (error) {
