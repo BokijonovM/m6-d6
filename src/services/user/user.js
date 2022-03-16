@@ -154,20 +154,27 @@ usersRouter.delete("/me", JWTAuthMiddleware, async (req, res, next) => {
 
 usersRouter.post("/login", async (req, res, next) => {
   try {
-    // 1. Obtain credentials from req.body
     const { email, password } = req.body;
 
-    // 2. Verify credentials
     const user = await UsersModel.checkCredentials(email, password);
 
     if (user) {
-      // 3. If credentials are ok we are going to generate an Access Token and send it as a response
       const accessToken = await authenticateUser(user);
       res.send({ accessToken });
     } else {
-      // 4. If credentials are not fine --> throw an error (401)
       next(createError(401, "Credentials are not ok!"));
     }
+  } catch (error) {
+    next(error);
+  }
+});
+
+usersRouter.post("/register", async (req, res, next) => {
+  try {
+    const newUser = new UsersModel(req.body);
+    const DbRes = await newUser.save({ new: true });
+
+    res.status(200).send(DbRes);
   } catch (error) {
     next(error);
   }
