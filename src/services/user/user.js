@@ -122,7 +122,7 @@ usersRouter.get("/me", JWTAuthMiddleware, async (req, res, next) => {
   }
 });
 
-usersRouter.get("/me/stories", basicAuthMiddleware, async (req, res, next) => {
+usersRouter.get("/me/stories", JWTAuthMiddleware, async (req, res, next) => {
   try {
     const posts = await BlogsModel.find({ user: req.user._id.toString() });
 
