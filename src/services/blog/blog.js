@@ -3,10 +3,12 @@ import createHttpError from "http-errors";
 import BlogsModel from "./schema.js";
 import q2m from "query-to-mongo";
 import { basicAuthMiddleware } from "../../auth/basic.js";
+import { authenticateUser } from "../../auth/tools.js";
+import { JWTAuthMiddleware } from "../../auth/token.js";
 
 const blogRouter = express.Router();
 
-blogRouter.post("/", basicAuthMiddleware, async (req, res, next) => {
+blogRouter.post("/", JWTAuthMiddleware, async (req, res, next) => {
   try {
     const newBlog = new BlogsModel({ ...req.body, user: req.user._id });
     const { _id } = await newBlog.save();
