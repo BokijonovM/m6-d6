@@ -28,6 +28,8 @@
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.1",
+    "passport": "^0.5.2",
+    "passport-google-oauth20": "^2.0.0",
     "query-to-mongo": "^0.10.2"
   },
   "devDependencies": {

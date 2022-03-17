@@ -10,12 +10,17 @@ import {
   forbiddenHandler,
   catchAllHandler,
 } from "./errorHandlers.js";
+import passport from "passport";
+import googleStrategy from "./auth/oauth.js";
 
 const server = express();
 const port = process.env.PORT || 3001;
 
+passport.use("google", googleStrategy);
+
 server.use(cors());
 server.use(express.json());
+server.use(passport.initialize());
 
 server.use("/blog", blogRouter);
 server.use("/author", authorsRouter);

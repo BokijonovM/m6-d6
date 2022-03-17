@@ -6,6 +6,7 @@ import { basicAuthMiddleware } from "../../auth/basic.js";
 import { adminOnlyMiddleware } from "../../auth/admin.js";
 import { authenticateUser } from "../../auth/tools.js";
 import { JWTAuthMiddleware } from "../../auth/token.js";
+import passport from "passport";
 
 const usersRouter = express.Router();
 
@@ -28,6 +29,30 @@ usersRouter.get(
       const user = await UsersModel.find();
       res.send(user);
     } catch (error) {
+      next(error);
+    }
+  }
+);
+
+usersRouter.get(
+  "/googleLogin",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+
+usersRouter.get(
+  "/googleRedirect",
+  passport.authenticate("google"),
+  (req, res, next) => {
+    try {
+      console.log(req.user.token);
+
+      if (req.user.role === "Admin") {
+        res.redirect(`${process.env.FE_URL}?accessToken=${req.user.token}`);
+      } else {
+        res.redirect(`${process.env.FE_URL}?accessToken=${req.user.token}`);
+      }
+    } catch (error) {
+      console.log(error);
       next(error);
     }
   }
